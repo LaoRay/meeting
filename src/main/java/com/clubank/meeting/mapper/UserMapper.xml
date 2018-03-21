@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clubank.meeting.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.clubank.meeting.entity.User">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="user_status" jdbcType="INTEGER" property="userStatus" />
+    <result column="head_icon" jdbcType="VARCHAR" property="headIcon" />
+    <result column="department_level" jdbcType="VARCHAR" property="departmentLevel" />
+    <result column="department_id" jdbcType="BIGINT" property="departmentId" />
+    <result column="user_role" jdbcType="INTEGER" property="userRole" />
+    <result column="user_position" jdbcType="VARCHAR" property="userPosition" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, user_account, user_name, password, user_status, head_icon, department_level, department_id,
+    user_role, user_position
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="userId" parameterType="com.clubank.meeting.entity.User">
+    insert into user (user_id, user_account, user_name, 
+      password, user_status, head_icon, department_level,
+      department_id, user_role, user_position
+      )
+    values (#{userId,jdbcType=BIGINT}, #{userAccount,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{userStatus,jdbcType=INTEGER}, #{headIcon,jdbcType=VARCHAR}, #{departmentLevel,jdbcType=VARCHAR},
+      #{departmentId,jdbcType=BIGINT}, #{userRole,jdbcType=INTEGER}, #{userPosition,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId" parameterType="com.clubank.meeting.entity.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userAccount != null">
+        user_account,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="userStatus != null">
+        user_status,
+      </if>
+      <if test="headIcon != null">
+        head_icon,
+      </if>
+      <if test="departmentLevel != null">
+        department_level,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="userRole != null">
+        user_role,
+      </if>
+      <if test="userPosition != null">
+        user_position,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userAccount != null">
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userStatus != null">
+        #{userStatus,jdbcType=INTEGER},
+      </if>
+      <if test="headIcon != null">
+        #{headIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentLevel != null">
+        #{departmentLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=BIGINT},
+      </if>
+      <if test="userRole != null">
+        #{userRole,jdbcType=INTEGER},
+      </if>
+      <if test="userPosition != null">
+        #{userPosition,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.clubank.meeting.entity.User">
+    update user
+    <set>
+      <if test="userAccount != null">
+        user_account = #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userStatus != null">
+        user_status = #{userStatus,jdbcType=INTEGER},
+      </if>
+      <if test="headIcon != null">
+        head_icon = #{headIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentLevel != null">
+        department_level = #{departmentLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=BIGINT},
+      </if>
+      <if test="userRole != null">
+        user_role = #{userRole,jdbcType=INTEGER},
+      </if>
+      <if test="userPosition != null">
+        user_position = #{userPosition,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.clubank.meeting.entity.User">
+    update user
+    set user_account = #{userAccount,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      user_status = #{userStatus,jdbcType=INTEGER},
+      head_icon = #{headIcon,jdbcType=VARCHAR},
+      department_level = #{departmentLevel,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=BIGINT},
+      user_role = #{userRole,jdbcType=INTEGER},
+      user_position = #{userPosition,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <!--根据部门ID查询该部门下所有员工-->
+  <select id="selectByDepartmentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where department_id = #{departmentId}
+    and user_status = 1
+  </select>
+  <!--根据部门level查询所有员工-->
+  <select id="selectUserListLikeDepartmentLevel" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where department_level LIKE CONCAT(#{departmentLevel}, '%')
+    and user_status = 1
+  </select>
+  <!--根据用户账号查询用户-->
+  <select id="selectByUserAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where user_account = #{userAccount}
+  </select>
+  <!--根据用户名称模糊查询-->
+  <select id="selectUserLikeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where user_name LIKE CONCAT('%',#{name},'%')
+    and user_status = 1
+  </select>
+</mapper>

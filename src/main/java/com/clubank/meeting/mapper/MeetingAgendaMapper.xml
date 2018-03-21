@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clubank.meeting.mapper.MeetingAgendaMapper">
+  <resultMap id="BaseResultMap" type="com.clubank.meeting.entity.MeetingAgenda">
+    <id column="agenda_id" jdbcType="BIGINT" property="agendaId" />
+    <result column="agenda_sort" jdbcType="INTEGER" property="agendaSort" />
+    <result column="agenda_name" jdbcType="VARCHAR" property="agendaName" />
+    <result column="agenda_content" jdbcType="VARCHAR" property="agendaContent" />
+    <result column="meeting_id" jdbcType="BIGINT" property="meetingId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    agenda_id, agenda_sort, agenda_name, agenda_content, meeting_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from meeting_agenda
+    where agenda_id = #{agendaId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from meeting_agenda
+    where agenda_id = #{agendaId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="agendaId" parameterType="com.clubank.meeting.entity.MeetingAgenda">
+    insert into meeting_agenda (agenda_id, agenda_sort, agenda_name,
+      agenda_content, meeting_id)
+    values (#{agendaId,jdbcType=BIGINT}, #{agendaSort,jdbcType=INTEGER}, #{agendaName,jdbcType=VARCHAR},
+      #{agendaContent,jdbcType=VARCHAR}, #{meetingId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="agendaId" parameterType="com.clubank.meeting.entity.MeetingAgenda">
+    insert into meeting_agenda
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="agendaId != null">
+        agenda_id,
+      </if>
+      <if test="agendaSort != null">
+        agenda_sort,
+      </if>
+      <if test="agendaName != null">
+        agenda_name,
+      </if>
+      <if test="agendaContent != null">
+        agenda_content,
+      </if>
+      <if test="meetingId != null">
+        meeting_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="agendaId != null">
+        #{agendaId,jdbcType=BIGINT},
+      </if>
+      <if test="agendaSort != null">
+        #{agendaSort,jdbcType=INTEGER},
+      </if>
+      <if test="agendaName != null">
+        #{agendaName,jdbcType=VARCHAR},
+      </if>
+      <if test="agendaContent != null">
+        #{agendaContent,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingId != null">
+        #{meetingId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.clubank.meeting.entity.MeetingAgenda">
+    update meeting_agenda
+    <set>
+      <if test="agendaSort != null">
+        agenda_sort = #{agendaSort,jdbcType=INTEGER},
+      </if>
+      <if test="agendaName != null">
+        agenda_name = #{agendaName,jdbcType=VARCHAR},
+      </if>
+      <if test="agendaContent != null">
+        agenda_content = #{agendaContent,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingId != null">
+        meeting_id = #{meetingId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where agenda_id = #{agendaId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.clubank.meeting.entity.MeetingAgenda">
+    update meeting_agenda
+    set agenda_sort = #{agendaSort,jdbcType=INTEGER},
+      agenda_name = #{agendaName,jdbcType=VARCHAR},
+      agenda_content = #{agendaContent,jdbcType=VARCHAR},
+      meeting_id = #{meetingId,jdbcType=BIGINT}
+    where agenda_id = #{agendaId,jdbcType=BIGINT}
+  </update>
+
+  <!--根据会议ID删除所有议程-->
+  <delete id="deleteByMeetingId" parameterType="java.lang.Long">
+    delete from meeting_agenda
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+  </delete>
+</mapper>

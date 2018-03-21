@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clubank.meeting.mapper.DepartmentMapper">
+  <resultMap id="BaseResultMap" type="com.clubank.meeting.entity.Department">
+    <id column="department_id" jdbcType="BIGINT" property="departmentId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="department_level" jdbcType="VARCHAR" property="departmentLevel" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="department_sort" jdbcType="INTEGER" property="departmentSort" />
+    <result column="department_status" jdbcType="INTEGER" property="departmentStatus" />
+    <result column="department_explain" jdbcType="VARCHAR" property="departmentExplain" />
+    <result column="department_leader" jdbcType="BIGINT" property="departmentLeader" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    department_id, parent_id, department_level, department_sort, department_name, department_status, department_explain,
+    department_leader
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from department
+    where department_id = #{departmentId,jdbcType=BIGINT}
+    and department_status = 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from department
+    where department_id = #{departmentId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="departmentId" parameterType="com.clubank.meeting.entity.Department">
+    insert into department (department_id, parent_id, department_name, department_level, department_sort,
+      department_status, department_explain, department_leader
+      )
+    values (#{departmentId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{departmentName,jdbcType=VARCHAR}, #{departmentLevel,jdbcType=VARCHAR},
+      #{departmentSort,jdbcType=INTEGER}, #{departmentStatus,jdbcType=INTEGER}, #{departmentExplain,jdbcType=VARCHAR}, #{departmentLeader,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="departmentId" parameterType="com.clubank.meeting.entity.Department">
+    insert into department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="departmentLevel != null">
+        department_level,
+      </if>
+      <if test="departmentSort != null">
+        department_sort,
+      </if>
+      <if test="departmentStatus != null">
+        department_status,
+      </if>
+      <if test="departmentExplain != null">
+        department_explain,
+      </if>
+      <if test="departmentLeader != null">
+        department_leader,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentLevel != null">
+        #{departmentLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentSort != null">
+        #{departmentSort,jdbcType=INTEGER},
+      </if>
+      <if test="departmentStatus != null">
+        #{departmentStatus,jdbcType=INTEGER},
+      </if>
+      <if test="departmentExplain != null">
+        #{departmentExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentLeader != null">
+        #{departmentLeader,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.clubank.meeting.entity.Department">
+    update department
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentLevel != null">
+        department_level = #{departmentLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentSort != null">
+        department_sort = #{departmentSort,jdbcType=INTEGER},
+      </if>
+      <if test="departmentStatus != null">
+        department_status = #{departmentStatus,jdbcType=INTEGER},
+      </if>
+      <if test="departmentExplain != null">
+        department_explain = #{departmentExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentLeader != null">
+        department_leader = #{departmentLeader,jdbcType=BIGINT},
+      </if>
+    </set>
+    where department_id = #{departmentId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.clubank.meeting.entity.Department">
+    update department
+    set parent_id = #{parentId,jdbcType=BIGINT},
+      department_name = #{departmentName,jdbcType=VARCHAR},
+      department_level = #{departmentLevel,jdbcType=VARCHAR},
+      department_sort = #{departmentSort,jdbcType=INTEGER},
+      department_status = #{departmentStatus,jdbcType=INTEGER},
+      department_explain = #{departmentExplain,jdbcType=VARCHAR},
+      department_leader = #{departmentLeader,jdbcType=BIGINT}
+    where department_id = #{departmentId,jdbcType=BIGINT}
+  </update>
+
+  <!--查询所有顶级部门-->
+  <select id="selectRootDepartmentList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from department
+    where parent_id = 0
+    and department_status = 1
+  </select>
+    <!--根据父id查询子部门列表-->
+  <select id="selectByParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from department
+    where parent_id = #{parentId}
+    and department_status = 1
+  </select>
+
+  <!--查询所有部门列表-->
+  <select id="selectAllDepartmentList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from department
+    where department_status = 1
+  </select>
+
+  <!--校验部门是否存在-->
+  <select id="countByNameAndParentId" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM department
+    WHERE 1 = 1
+    <if test="departmentName != null">
+      AND department_name = #{departmentName}
+    </if>
+    <if test="parentId != null">
+      AND parent_id = #{parentId}
+    </if>
+    <if test="department_id != null">
+      AND department_id != #{departmentId}
+    </if>
+  </select>
+</mapper>

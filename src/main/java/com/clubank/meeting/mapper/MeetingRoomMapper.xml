@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clubank.meeting.mapper.MeetingRoomMapper">
+  <resultMap id="BaseResultMap" type="com.clubank.meeting.entity.MeetingRoom">
+    <id column="room_id" jdbcType="BIGINT" property="roomId" />
+    <result column="room_name" jdbcType="VARCHAR" property="roomName" />
+    <result column="room_status" jdbcType="INTEGER" property="roomStatus" />
+    <result column="room_explain" jdbcType="VARCHAR" property="roomExplain" />
+    <result column="room_location" jdbcType="VARCHAR" property="roomLocation" />
+    <result column="room_capacity" jdbcType="INTEGER" property="roomCapacity" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    room_id, room_name, room_status, room_explain, room_location, room_capacity
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from meeting_room
+    where room_id = #{roomId,jdbcType=BIGINT}
+    and room_status = 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from meeting_room
+    where room_id = #{roomId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="roomId" parameterType="com.clubank.meeting.entity.MeetingRoom">
+    insert into meeting_room (room_id, room_name, room_status, 
+      room_explain, room_location, room_capacity)
+    values (#{roomId,jdbcType=BIGINT}, #{roomName,jdbcType=VARCHAR}, #{roomStatus,jdbcType=INTEGER}, 
+      #{roomExplain,jdbcType=VARCHAR}, #{roomLocation,jdbcType=VARCHAR}, #{roomCapacity,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="roomId" parameterType="com.clubank.meeting.entity.MeetingRoom">
+    insert into meeting_room
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roomId != null">
+        room_id,
+      </if>
+      <if test="roomName != null">
+        room_name,
+      </if>
+      <if test="roomStatus != null">
+        room_status,
+      </if>
+      <if test="roomExplain != null">
+        room_explain,
+      </if>
+      <if test="roomLocation != null">
+        room_location,
+      </if>
+      <if test="roomCapacity != null">
+        room_capacity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roomId != null">
+        #{roomId,jdbcType=BIGINT},
+      </if>
+      <if test="roomName != null">
+        #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomStatus != null">
+        #{roomStatus,jdbcType=INTEGER},
+      </if>
+      <if test="roomExplain != null">
+        #{roomExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="roomLocation != null">
+        #{roomLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="roomCapacity != null">
+        #{roomCapacity,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.clubank.meeting.entity.MeetingRoom">
+    update meeting_room
+    <set>
+      <if test="roomName != null">
+        room_name = #{roomName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomStatus != null">
+        room_status = #{roomStatus,jdbcType=INTEGER},
+      </if>
+      <if test="roomExplain != null">
+        room_explain = #{roomExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="roomLocation != null">
+        room_location = #{roomLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="roomCapacity != null">
+        room_capacity = #{roomCapacity,jdbcType=INTEGER},
+      </if>
+    </set>
+    where room_id = #{roomId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.clubank.meeting.entity.MeetingRoom">
+    update meeting_room
+    set room_name = #{roomName,jdbcType=VARCHAR},
+      room_status = #{roomStatus,jdbcType=INTEGER},
+      room_explain = #{roomExplain,jdbcType=VARCHAR},
+      room_location = #{roomLocation,jdbcType=VARCHAR},
+      room_capacity = #{roomCapacity,jdbcType=INTEGER}
+    where room_id = #{roomId,jdbcType=BIGINT}
+  </update>
+
+  <!--查询所有会议室-->
+  <select id="selectAllMeetingRoomList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from meeting_room
+    WHERE room_status = 1
+  </select>
+</mapper>

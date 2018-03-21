@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clubank.meeting.mapper.MeetingMapper">
+  <resultMap id="BaseResultMap" type="com.clubank.meeting.entity.Meeting">
+    <id column="meeting_id" jdbcType="BIGINT" property="meetingId" />
+    <result column="room_id" jdbcType="BIGINT" property="roomId" />
+    <result column="meeting_room" jdbcType="VARCHAR" property="meetingRoom" />
+    <result column="organizer_id" jdbcType="BIGINT" property="organizerId" />
+    <result column="organizer_name" jdbcType="VARCHAR" property="organizerName" />
+    <result column="review_id" jdbcType="BIGINT" property="reviewId" />
+    <result column="review_name" jdbcType="VARCHAR" property="reviewName" />
+    <result column="meeting_name" jdbcType="VARCHAR" property="meetingName" />
+    <result column="meeting_subject" jdbcType="VARCHAR" property="meetingSubject" />
+    <result column="meeting_status" jdbcType="INTEGER" property="meetingStatus" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="remind_type" jdbcType="INTEGER" property="remindType" />
+    <result column="process_instance_id" jdbcType="VARCHAR" property="processInstanceId" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+
+    <collection property="agendaList" ofType="com.clubank.meeting.entity.MeetingAgenda">
+      <id column="agenda_id" jdbcType="BIGINT" property="agendaId" />
+      <result column="agenda_sort" jdbcType="INTEGER" property="agendaSort" />
+      <result column="agenda_name" jdbcType="VARCHAR" property="agendaName" />
+      <result column="agenda_content" jdbcType="VARCHAR" property="agendaContent" />
+    </collection>
+    
+    <collection property="attachmentList" ofType="com.clubank.meeting.entity.MeetingAttachment">
+      <id column="attachment_id" jdbcType="BIGINT" property="attachmentId" />
+      <result column="attachment_url" jdbcType="VARCHAR" property="attachmentUrl" />
+      <result column="attachment_name" jdbcType="VARCHAR" property="attachmentName" />
+      <result column="attachment_status" jdbcType="INTEGER" property="attachmentStatus" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    meeting_id, room_id, meeting_room, organizer_id, organizer_name, review_id, review_name, meeting_name, meeting_subject, meeting_status,
+    remarks, start_time, end_time, remind_type, process_instance_id, comment, create_time, create_user_id, create_user,
+    update_time, update_user_id, update_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from meeting
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from meeting
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="meetingId" parameterType="com.clubank.meeting.entity.Meeting">
+    insert into meeting (meeting_id, room_id, meeting_room, organizer_id, organizer_name, review_id, review_name,
+      meeting_name, meeting_subject, meeting_status, 
+      remarks, start_time, end_time, 
+      remind_type, process_instance_id, comment, create_time, create_user_id,
+      create_user, update_time, update_user_id, update_user
+      )
+    values (#{meetingId,jdbcType=BIGINT}, #{roomId,jdbcType=BIGINT}, #{meetingRoom,jdbcType=VARCHAR}, #{organizerId,jdbcType=BIGINT}, #{organizerName,jdbcType=VARCHAR},
+      #{reviewId,jdbcType=BIGINT}, #{reviewName,jdbcType=VARCHAR}, #{meetingName,jdbcType=VARCHAR}, #{meetingSubject,jdbcType=VARCHAR}, #{meetingStatus,jdbcType=INTEGER},
+      #{remarks,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{remindType,jdbcType=INTEGER}, #{processInstanceId,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT},
+      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT}, #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="meetingId" parameterType="com.clubank.meeting.entity.Meeting">
+    insert into meeting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="meetingId != null">
+        meeting_id,
+      </if>
+      <if test="roomId != null">
+        room_id,
+      </if>
+      <if test="meetingRoom != null">
+        meeting_room,
+      </if>
+      <if test="organizerId != null">
+        organizer_id,
+      </if>
+      <if test="organizerName != null">
+        organizer_name,
+      </if>
+      <if test="reviewId != null">
+        review_id,
+      </if>
+      <if test="reviewName != null">
+        review_name,
+      </if>
+      <if test="meetingName != null">
+        meeting_name,
+      </if>
+      <if test="meetingSubject != null">
+        meeting_subject,
+      </if>
+      <if test="meetingStatus != null">
+        meeting_status,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="remindType != null">
+        remind_type,
+      </if>
+      <if test="processInstanceId != null">
+        process_instance_id,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUserId != null">
+        update_user_id,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="meetingId != null">
+        #{meetingId,jdbcType=BIGINT},
+      </if>
+      <if test="roomId != null">
+        #{roomId,jdbcType=BIGINT},
+      </if>
+      <if test="meetingRoom != null">
+        #{meetingRoom,jdbcType=VARCHAR},
+      </if>
+      <if test="organizerId != null">
+        #{organizerId,jdbcType=BIGINT},
+      </if>
+      <if test="organizerName != null">
+        #{organizerName,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewId != null">
+        #{reviewId,jdbcType=BIGINT},
+      </if>
+      <if test="reviewName != null">
+        #{reviewName,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingName != null">
+        #{meetingName,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingSubject != null">
+        #{meetingSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingStatus != null">
+        #{meetingStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remindType != null">
+        #{remindType,jdbcType=INTEGER},
+      </if>
+      <if test="processInstanceId != null">
+        #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserId != null">
+        #{updateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.clubank.meeting.entity.Meeting">
+    update meeting
+    <set>
+      <if test="roomId != null">
+        room_id = #{roomId,jdbcType=BIGINT},
+      </if>
+      <if test="meetingRoom != null">
+        meeting_room = #{meetingRoom,jdbcType=VARCHAR},
+      </if>
+      <if test="organizerId != null">
+        organizer_id = #{organizerId,jdbcType=BIGINT},
+      </if>
+      <if test="organizerName != null">
+        organizer_name = #{organizerName,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewId != null">
+        review_id = #{reviewId,jdbcType=BIGINT},
+      </if>
+      <if test="reviewName != null">
+        review_name = #{reviewName,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingName != null">
+        meeting_name = #{meetingName,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingSubject != null">
+        meeting_subject = #{meetingSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="meetingStatus != null">
+        meeting_status = #{meetingStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remindType != null">
+        remind_type = #{remindType,jdbcType=INTEGER},
+      </if>
+      <if test="processInstanceId != null">
+        process_instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUserId != null">
+        update_user_id = #{updateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.clubank.meeting.entity.Meeting">
+    update meeting
+    set room_id = #{roomId,jdbcType=BIGINT},
+      meeting_room = #{meetingRoom,jdbcType=VARCHAR},
+      organizer_id = #{organizerId,jdbcType=BIGINT},
+      organizer_name = #{organizerName,jdbcType=VARCHAR},
+      review_id = #{reviewId,jdbcType=BIGINT},
+      review_name = #{reviewName,jdbcType=VARCHAR},
+      meeting_name = #{meetingName,jdbcType=VARCHAR},
+      meeting_subject = #{meetingSubject,jdbcType=VARCHAR},
+      meeting_status = #{meetingStatus,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      remind_type = #{remindType,jdbcType=INTEGER},
+      process_instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user_id = #{updateUserId,jdbcType=BIGINT}
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+  </update>
+
+  <!--查询会议详情-->
+  <select id="selectWithDetailsByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select m.*, ma.*, mat.*
+    FROM meeting m
+    LEFT JOIN meeting_agenda ma ON m.meeting_id = ma.meeting_id
+    LEFT JOIN meeting_attachment mat ON m.meeting_id = mat.meeting_id
+    where m.meeting_id = #{meetingId}
+  </select>
+
+  <!--查询我创建的会议-->
+  <select id="selectMeetingListByCreateUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from meeting
+    where create_user_id = #{userId,jdbcType=BIGINT}
+    order by create_time DESC
+  </select>
+
+  <!--查询指派给我的会议-->
+  <select id="selectMeetingListByOrganizerId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from meeting
+    where organizer_id = #{userId,jdbcType=BIGINT}
+    and create_user_id != #{userId,jdbcType=BIGINT}
+    and meeting_status != 2
+    order by create_time DESC
+  </select>
+
+  <!--查询已处理的会议-->
+  <select id="selectHandledMeetingListByUserId" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from meeting
+    where
+      (create_user_id = #{userId,jdbcType=BIGINT}
+      or organizer_id = #{userId,jdbcType=BIGINT}
+      or review_id = #{userId,jdbcType=BIGINT})
+    <if test="userRole == 1">
+      and meeting_status != 1
+    </if>
+    <if test="userRole == 2">
+      and meeting_status != 2
+    </if>
+    order by create_time DESC
+  </select>
+
+  <!--查询已审核的会议-->
+  <select id="selectApprovedMeetingByReviewId" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from meeting
+    where review_id = #{userId}
+    and meeting_status = #{status}
+    order by create_time DESC
+  </select>
+
+  <!--查询待参加的会议-->
+  <select id="selectToAttendMeetingList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select m.*
+    from meeting m
+    inner join meeting_user mu on m.meeting_id = mu.meeting_id
+    where mu.user_id = #{userId}
+    and m.meeting_status = 3
+    and mu.confirm_status != 3
+    order by create_time DESC
+  </select>
+
+  <!--查询已参加会议-->
+  <select id="selectAttendedMeetingList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select m.*
+    from meeting m
+    inner join meeting_user mu on m.meeting_id = mu.meeting_id
+    where mu.user_id = #{userId}
+    and m.meeting_status = 4
+    and mu.confirm_status != 3
+    order by create_time DESC
+  </select>
+
+  <!--查询已放弃参加的会议-->
+  <select id="selectGiveUpMeetingList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select m.*
+    from meeting m
+    inner join meeting_user mu on m.meeting_id = mu.meeting_id
+    where mu.user_id = #{userId}
+    and mu.confirm_status = 3
+    order by create_time DESC
+  </select>
+
+  <!--定时任务-->
+  <!--会议结束后将状态置为已结束-->
+  <update id="updateFinishMeetingStatus">
+    UPDATE meeting
+    SET meeting_status = 4
+    WHERE end_time <![CDATA[<=]]> NOW()
+    AND meeting_status = 3
+  </update>
+
+  <!--查询即将开始的会议-->
+  <select id="selectAboutToStartMeeting" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
+    FROM meeting
+    WHERE meeting_status = 3
+    AND
+      ((remind_type = 2 AND TIMESTAMPDIFF(MINUTE, NOW(), start_time) = 15)
+    OR
+      (remind_type = 3 AND TIMESTAMPDIFF(MINUTE, NOW(), start_time) = 30)
+    OR
+      (remind_type = 4 AND TIMESTAMPDIFF(MINUTE, NOW(), start_time) = 60))
+  </select>
+</mapper>

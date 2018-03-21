@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clubank.meeting.mapper.MessageMapper">
+  <resultMap id="BaseResultMap" type="com.clubank.meeting.entity.Message">
+    <id column="message_id" jdbcType="BIGINT" property="messageId" />
+    <result column="meeting_id" jdbcType="BIGINT" property="meetingId" />
+    <result column="message_type" jdbcType="INTEGER" property="messageType" />
+    <result column="message_title" jdbcType="VARCHAR" property="messageTitle" />
+    <result column="message_content" jdbcType="VARCHAR" property="messageContent" />
+    <result column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    
+    <association property="userMessage" javaType="com.clubank.meeting.entity.UserMessage">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="message_id" jdbcType="BIGINT" property="messageId" />
+      <result column="user_id" jdbcType="BIGINT" property="userId" />
+      <result column="is_delete" jdbcType="BIT" property="isDelete" />
+      <result column="is_read" jdbcType="BIT" property="isRead" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    message_id, meeting_id, message_type, message_title, message_content, task_id, description,
+    create_time, create_user_id, create_user_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where message_id = #{messageId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from message
+    where message_id = #{messageId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="messageId" parameterType="com.clubank.meeting.entity.Message">
+    insert into message (message_id, meeting_id, message_type, 
+      message_title, message_content, description, task_id,
+      create_time, create_user_id, create_user_name
+      )
+    values (#{messageId,jdbcType=BIGINT}, #{meetingId,jdbcType=BIGINT}, #{messageType,jdbcType=INTEGER}, 
+      #{messageTitle,jdbcType=VARCHAR}, #{messageContent,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="messageId" parameterType="com.clubank.meeting.entity.Message">
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="messageId != null">
+        message_id,
+      </if>
+      <if test="meetingId != null">
+        meeting_id,
+      </if>
+      <if test="messageType != null">
+        message_type,
+      </if>
+      <if test="messageTitle != null">
+        message_title,
+      </if>
+      <if test="messageContent != null">
+        message_content,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="messageId != null">
+        #{messageId,jdbcType=BIGINT},
+      </if>
+      <if test="meetingId != null">
+        #{meetingId,jdbcType=BIGINT},
+      </if>
+      <if test="messageType != null">
+        #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="messageTitle != null">
+        #{messageTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="messageContent != null">
+        #{messageContent,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.clubank.meeting.entity.Message">
+    update message
+    <set>
+      <if test="meetingId != null">
+        meeting_id = #{meetingId,jdbcType=BIGINT},
+      </if>
+      <if test="messageType != null">
+        message_type = #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="messageTitle != null">
+        message_title = #{messageTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="messageContent != null">
+        message_content = #{messageContent,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null">
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where message_id = #{messageId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.clubank.meeting.entity.Message">
+    update message
+    set meeting_id = #{meetingId,jdbcType=BIGINT},
+      message_type = #{messageType,jdbcType=INTEGER},
+      message_title = #{messageTitle,jdbcType=VARCHAR},
+      message_content = #{messageContent,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR}
+    where message_id = #{messageId,jdbcType=BIGINT}
+  </update>
+  
+  <!--查询用户消息列表-->
+  <select id="selectMessageListByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select m.*, um.*
+    from message m JOIN user_message um ON m.message_id = um.message_id
+    where um.user_id = #{userId}
+    <if test="readStatus >= 0">
+      and um.is_read = #{readStatus}
+    </if>
+    and um.is_delete = false
+    order by m.create_time DESC
+  </select>
+
+  <!--根据会议主键和用户主键查询催审消息-->
+  <select id="selectByMeetingIdAndUserId" parameterType="map" resultMap="BaseResultMap">
+    SELECT
+        m.*, um.*
+    FROM
+        message m
+    JOIN user_message um ON m.message_id = um.message_id
+    WHERE
+        m.meeting_id = #{meetingId}
+    AND um.user_id = #{userId}
+    AND m.message_type = 3
+  </select>
+
+    <!--根据会议主键查询用户未读消息-->
+    <select id="selectUnreadByMeetingIdAndUserId" parameterType="map" resultType="java.lang.Long">
+        SELECT
+            um.id as id
+        FROM message m JOIN user_message um ON m.message_id = um.message_id
+        WHERE um.user_id = #{userId}
+        AND m.meeting_id = #{meetingId}
+        AND um.is_delete = 0
+        AND um.is_read = 0
+    </select>
+</mapper>

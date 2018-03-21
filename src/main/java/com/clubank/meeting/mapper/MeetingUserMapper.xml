@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clubank.meeting.mapper.MeetingUserMapper">
+  <resultMap id="BaseResultMap" type="com.clubank.meeting.entity.MeetingUser">
+    <id column="meeting_id" jdbcType="BIGINT" property="meetingId" />
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="confirm_status" jdbcType="INTEGER" property="confirmStatus" />
+    <result column="meeting_role" jdbcType="INTEGER" property="meetingRole" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    meeting_id, user_id, confirm_status, meeting_role
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.clubank.meeting.entity.MeetingUser" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from meeting_user
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.clubank.meeting.entity.MeetingUser">
+    delete from meeting_user
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.clubank.meeting.entity.MeetingUser">
+    insert into meeting_user (meeting_id, user_id, confirm_status,
+      meeting_role)
+    values (#{meetingId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{confirmStatus,jdbcType=INTEGER},
+      #{meetingRole,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.clubank.meeting.entity.MeetingUser">
+    insert into meeting_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="meetingId != null">
+        meeting_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="confirmStatus != null">
+        confirm_status,
+      </if>
+      <if test="meetingRole != null">
+        meeting_role,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="meetingId != null">
+        #{meetingId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="confirmStatus != null">
+        #{confirmStatus,jdbcType=INTEGER},
+      </if>
+      <if test="meetingRole != null">
+        #{meetingRole,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.clubank.meeting.entity.MeetingUser">
+    update meeting_user
+    <set>
+      <if test="confirmStatus != null">
+        confirm_status = #{confirmStatus,jdbcType=INTEGER},
+      </if>
+      <if test="meetingRole != null">
+        meeting_role = #{meetingRole,jdbcType=INTEGER},
+      </if>
+    </set>
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.clubank.meeting.entity.MeetingUser">
+    update meeting_user
+    set confirm_status = #{confirmStatus,jdbcType=INTEGER},
+      meeting_role = #{meetingRole,jdbcType=INTEGER}
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <!--根据会议主键查询参会人(所有)-->
+  <select id="selectUserListByMeetingId" parameterType="java.lang.Long" resultType="map">
+    SELECT
+        u.user_id AS userId,
+        u.user_name AS userName,
+        u.department_id AS departmentId,
+        d.department_name AS departmentName,
+        u.user_role AS userRole,
+        u.user_position AS userPosition,
+        mu.confirm_status AS confirmStatus
+    FROM
+        meeting_user mu
+    LEFT JOIN user u ON mu.user_id = u.user_id
+    LEFT JOIN department d ON u.department_id = d.department_id
+    WHERE mu.meeting_id = #{meetingId}
+  </select>
+
+  <!--根据会议主键查询参会人(除放弃参会人)-->
+  <select id="selectAttendeeListByMeetingId" parameterType="java.lang.Long" resultType="map">
+    SELECT
+        u.user_id AS userId,
+        u.user_name AS userName,
+        u.department_id AS departmentId,
+        d.department_name AS departmentName,
+        u.user_role AS userRole,
+        u.user_position AS userPosition,
+        mu.confirm_status AS confirmStatus
+    FROM
+        meeting_user mu
+    LEFT JOIN user u ON mu.user_id = u.user_id
+    LEFT JOIN department d ON u.department_id = d.department_id
+    WHERE mu.meeting_id = #{meetingId}
+    AND mu.confirm_status != 3
+  </select>
+
+  <!--根据会议ID删除所有参会人员-->
+  <delete id="deleteByMeetingId" parameterType="java.lang.Long">
+    delete from meeting_user
+    where meeting_id = #{meetingId,jdbcType=BIGINT}
+  </delete>
+</mapper>
